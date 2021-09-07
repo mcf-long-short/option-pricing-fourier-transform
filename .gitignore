@@ -3,6 +3,7 @@
 __pycache__
 venv
 .venv
+*.egg-info
 
 # Files to ignore
 *.pyc
