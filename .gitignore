@@ -1,0 +1,9 @@
+# Directories to ignore
+.vscode/
+__pycache__
+venv
+.venv
+
+# Files to ignore
+*.pyc
+*.sqlite
