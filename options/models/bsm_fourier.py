@@ -8,17 +8,17 @@ from .base import OptionPricingModel
 class BSMForierTransformPricing(OptionPricingModel):
 
     @staticmethod
-    def BSM_integral_function(u, S0, K, T, r, sigma):
+    def bsm_integral_function(u, S0, K, T, r, sigma):
         """ 
         Valuation of European call option in BSM model via Lewis (2001)
         Fourier-based approach: integral function. 
         """
-        cf_value = BSMForierTransformPricing.BSM_characteristic_function(u - 1j * 0.5, 0.0, T, r, sigma)  # noqa
+        cf_value = BSMForierTransformPricing.bsm_characteristic_function(u - 1j * 0.5, 0.0, T, r, sigma)  # noqa
         int_value = 1 / (u ** 2 + 0.25) * (np.exp(1j * u * np.log(S0 / K)) * cf_value).real  # noqa
         return int_value
 
     @staticmethod
-    def BSM_characteristic_function(v, x0, T, r, sigma):
+    def bsm_characteristic_function(v, x0, T, r, sigma):
         """
         Valuation of European call option in BSM model via Lewis (2001) and Carr-Madan (1999)
         Fourier-based approach: charcteristic function. 
@@ -57,7 +57,7 @@ class BSM_FT_NUM(BSMForierTransformPricing):
         call_value: float
             European call option present value
         """
-        int_value = quad(lambda u: self.BSM_integral_function(u, S, K, T, r, sigma), 0, 100)[0]  # noqa
+        int_value = quad(lambda u: self.bsm_integral_function(u, S, K, T, r, sigma), 0, 100)[0]  # noqa
         call_value = max(0, S - np.exp(-r * T) * np.sqrt(S * K) / np.pi * int_value)  # noqa
         return call_value
 
@@ -107,7 +107,7 @@ class BSM_FFT(BSMForierTransformPricing):
         if S >= 0.95 * K:  # ITM case
             alpha = 1.5
             v = vo - (alpha + 1) * 1j
-            modcharFunc = np.exp(-r * T) * (self.BSM_characteristic_function(
+            modcharFunc = np.exp(-r * T) * (self.bsm_characteristic_function(
                 v, x0, T, r, sigma) /
                 (alpha ** 2 + alpha
                  - vo ** 2 + 1j * (2 * alpha + 1) * vo))
@@ -117,7 +117,7 @@ class BSM_FFT(BSMForierTransformPricing):
             modcharFunc1 = np.exp(-r * T) * (1 / (1 + 1j * (vo - 1j * alpha))
                                              - np.exp(r * T) /
                                              (1j * (vo - 1j * alpha))
-                                             - self.BSM_characteristic_function(
+                                             - self.bsm_characteristic_function(
                 v, x0, T, r, sigma) /
                 ((vo - 1j * alpha) ** 2
                  - 1j * (vo - 1j * alpha)))
@@ -125,7 +125,7 @@ class BSM_FFT(BSMForierTransformPricing):
             modcharFunc2 = np.exp(-r * T) * (1 / (1 + 1j * (vo + 1j * alpha))
                                              - np.exp(r * T) /
                                              (1j * (vo + 1j * alpha))
-                                             - self.BSM_characteristic_function(
+                                             - self.bsm_characteristic_function(
                 v, x0, T, r, sigma) /
                 ((vo + 1j * alpha) ** 2
                  - 1j * (vo + 1j * alpha)))
