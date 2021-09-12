@@ -72,8 +72,8 @@ class BSM_FFT(BSMForierTransformPricing):
     """
 
     def _calculate_call_option_price(self, S, K, T, r, sigma):
-        ''' Valuation of European call option in BSM model via Lewis (2001)
-        --> Fourier-based approach (integral).
+        """Valuation of European call option in BSM model via Lewis (2001)
+        Fourier-based approach (integral).
 
         Parameters
         ==========
@@ -93,7 +93,7 @@ class BSM_FFT(BSMForierTransformPricing):
         call_value: float
             European call option present value
 
-        '''
+        """
         k = np.log(K / S)
         x0 = np.log(S / S)
         g = 1  # factor to increase accuracy
