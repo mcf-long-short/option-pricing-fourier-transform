@@ -5,7 +5,7 @@ import numpy as np
 from .base import OptionPricingModel
 
 
-class ForierTransformPricing(OptionPricingModel):
+class BSMForierTransformPricing(OptionPricingModel):
 
     @staticmethod
     def BSM_integral_function(u, S0, K, T, r, sigma):
@@ -13,7 +13,7 @@ class ForierTransformPricing(OptionPricingModel):
         Valuation of European call option in BSM model via Lewis (2001)
         Fourier-based approach: integral function. 
         """
-        cf_value = ForierTransformPricing.BSM_characteristic_function(u - 1j * 0.5, 0.0, T, r, sigma)  # noqa
+        cf_value = BSMForierTransformPricing.BSM_characteristic_function(u - 1j * 0.5, 0.0, T, r, sigma)  # noqa
         int_value = 1 / (u ** 2 + 0.25) * (np.exp(1j * u * np.log(S0 / K)) * cf_value).real  # noqa
         return int_value
 
@@ -27,7 +27,7 @@ class ForierTransformPricing(OptionPricingModel):
         return cf_value
 
 
-class BSM_FT_NUM(ForierTransformPricing):
+class BSM_FT_NUM(BSMForierTransformPricing):
     """Fourier option pricing - Lewis Approach (2001)
 
     Class implementing calculation for European option price using Forier Transform
@@ -62,7 +62,7 @@ class BSM_FT_NUM(ForierTransformPricing):
         return call_value
 
 
-class BSM_FFT(ForierTransformPricing):
+class BSM_FFT(BSMForierTransformPricing):
     """Fourier option pricing - Lewis Approach (2001)
 
     Class implementing calculation for European option price using Forier Transform
