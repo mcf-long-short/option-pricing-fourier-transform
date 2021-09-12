@@ -83,4 +83,4 @@ if st.button(f'Calculate option price for {ticker}'):
         call_price = option.price('call', 'MERTON_FFT', lamb, mu, delta)
 
     # Displaying call/put option price
-    st.subheader(f'Call option price: {call_price}')
+    st.subheader(f'Call option price: {round(call_price, 2)} $')
