@@ -6,7 +6,7 @@ Stramlit app: https://share.streamlit.io/mcf-long-short/option-pricing-fourier-t
 
 `Fourier Transform` and `Fast Fourier transforms (FFT)` represent popular approaches to option pricing. They provide a semi-closed form expressions for `European` and `American option prices`. Most importantly, calculation using these methods is fast and accurate, very useful when we need to bring the model to data (to calibrate it). A number of methods have been proposed in the literature. The goal of this project is to implement these algorithms for `Black–Scholes` and `Merton model`. Brief introduction to the methods as well as implementation of various models in Python can be found in `Hilpisch (2015)`. A really nicely written intro to the Fourier transform and their applications in option pricing can be found in `Schmeltze (2010)`.
 
-This repository contains implementation of various Fourier transform methods for pricing options: Black–Scholes and Merton model via FT and FFT.
+This repository contains implementation of various Fourier transform methods for pricing options: Black–Scholes and Merton model via FT and FFT. There is an implementation of those models, a `streamlit` web app for testing those models and jupyter notebook for model performance comparison under `/notebooks/` directory.
 
 Key implementation references:
 
