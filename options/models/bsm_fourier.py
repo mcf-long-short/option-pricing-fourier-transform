@@ -5,20 +5,20 @@ import numpy as np
 from .base import OptionPricingModel
 
 
-class ForierTransformPricing(OptionPricingModel):
+class BSMForierTransformPricing(OptionPricingModel):
 
     @staticmethod
-    def BSM_integral_function(u, S0, K, T, r, sigma):
+    def bsm_integral_function(u, S0, K, T, r, sigma):
         """ 
         Valuation of European call option in BSM model via Lewis (2001)
         Fourier-based approach: integral function. 
         """
-        cf_value = ForierTransformPricing.BSM_characteristic_function(u - 1j * 0.5, 0.0, T, r, sigma)  # noqa
+        cf_value = BSMForierTransformPricing.bsm_characteristic_function(u - 1j * 0.5, 0.0, T, r, sigma)  # noqa
         int_value = 1 / (u ** 2 + 0.25) * (np.exp(1j * u * np.log(S0 / K)) * cf_value).real  # noqa
         return int_value
 
     @staticmethod
-    def BSM_characteristic_function(v, x0, T, r, sigma):
+    def bsm_characteristic_function(v, x0, T, r, sigma):
         """
         Valuation of European call option in BSM model via Lewis (2001) and Carr-Madan (1999)
         Fourier-based approach: charcteristic function. 
@@ -27,7 +27,7 @@ class ForierTransformPricing(OptionPricingModel):
         return cf_value
 
 
-class BSM_FT_NUM(ForierTransformPricing):
+class BSM_FT_NUM(BSMForierTransformPricing):
     """Fourier option pricing - Lewis Approach (2001)
 
     Class implementing calculation for European option price using Forier Transform
@@ -57,12 +57,12 @@ class BSM_FT_NUM(ForierTransformPricing):
         call_value: float
             European call option present value
         """
-        int_value = quad(lambda u: self.BSM_integral_function(u, S, K, T, r, sigma), 0, 100)[0]  # noqa
+        int_value = quad(lambda u: self.bsm_integral_function(u, S, K, T, r, sigma), 0, 100)[0]  # noqa
         call_value = max(0, S - np.exp(-r * T) * np.sqrt(S * K) / np.pi * int_value)  # noqa
         return call_value
 
 
-class BSM_FFT(ForierTransformPricing):
+class BSM_FFT(BSMForierTransformPricing):
     """Fourier option pricing - Lewis Approach (2001)
 
     Class implementing calculation for European option price using Forier Transform
@@ -72,8 +72,8 @@ class BSM_FFT(ForierTransformPricing):
     """
 
     def _calculate_call_option_price(self, S, K, T, r, sigma):
-        ''' Valuation of European call option in BSM model via Lewis (2001)
-        --> Fourier-based approach (integral).
+        """Valuation of European call option in BSM model via Lewis (2001)
+        Fourier-based approach (integral).
 
         Parameters
         ==========
@@ -93,7 +93,7 @@ class BSM_FFT(ForierTransformPricing):
         call_value: float
             European call option present value
 
-        '''
+        """
         k = np.log(K / S)
         x0 = np.log(S / S)
         g = 1  # factor to increase accuracy
@@ -107,7 +107,7 @@ class BSM_FFT(ForierTransformPricing):
         if S >= 0.95 * K:  # ITM case
             alpha = 1.5
             v = vo - (alpha + 1) * 1j
-            modcharFunc = np.exp(-r * T) * (self.BSM_characteristic_function(
+            modcharFunc = np.exp(-r * T) * (self.bsm_characteristic_function(
                 v, x0, T, r, sigma) /
                 (alpha ** 2 + alpha
                  - vo ** 2 + 1j * (2 * alpha + 1) * vo))
@@ -117,7 +117,7 @@ class BSM_FFT(ForierTransformPricing):
             modcharFunc1 = np.exp(-r * T) * (1 / (1 + 1j * (vo - 1j * alpha))
                                              - np.exp(r * T) /
                                              (1j * (vo - 1j * alpha))
-                                             - self.BSM_characteristic_function(
+                                             - self.bsm_characteristic_function(
                 v, x0, T, r, sigma) /
                 ((vo - 1j * alpha) ** 2
                  - 1j * (vo - 1j * alpha)))
@@ -125,7 +125,7 @@ class BSM_FFT(ForierTransformPricing):
             modcharFunc2 = np.exp(-r * T) * (1 / (1 + 1j * (vo + 1j * alpha))
                                              - np.exp(r * T) /
                                              (1j * (vo + 1j * alpha))
-                                             - self.BSM_characteristic_function(
+                                             - self.bsm_characteristic_function(
                 v, x0, T, r, sigma) /
                 ((vo + 1j * alpha) ** 2
                  - 1j * (vo + 1j * alpha)))
