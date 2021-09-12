@@ -18,3 +18,10 @@ Key implementation references:
 - Schmeltze (2010) Fourier Pricing. Full title: Option Pricing formulae using Fourier Transform: Theory and Applications
 
 This repository represents group project work for course in `Derivatives` for advanced degree [Masters in Computational Finance, Union University](http://mcf.raf.edu.rs/).
+
+## Demo
+
+
+https://user-images.githubusercontent.com/30963594/132988185-6e9852a1-0392-4008-91f9-554d60b6c3b1.mp4
+
+
